@@ -1,0 +1,285 @@
+const API_BASE = `https://fitnesstrac-kr.herokuapp.com/api`;
+
+//POST/users/register
+export const signUp = async (user, pass) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/register`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: user, password: pass })
+    });
+    const data = await res.json();
+    console.log(data)
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//POST/users/login
+export const authenticateUser = async (user, pass) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/login`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: user, password: pass })
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// GET/users/me 
+export const fetchUserDetails = async (token) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/me`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//GET/users/:username/routine
+export const fetchUserRoutines = async (token, user) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/${user}/routines`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export const fetchAllActivities = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/activities`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//POST/activities
+export const addActivity = async ({ id, name, description }, token) => {
+  try {
+    const res = await fetch(`${API_BASE}/activities`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ id, name, description }) 
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//PATCH/activities/:activityId
+export const modifyActivity = async (activityId, { name, description }, token) => {
+  try {
+    const res = await fetch(`${API_BASE}/activities/${activityId}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ name, description }) 
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//GET/activities/:activityId/routines
+export const fetchRoutinesForActivity = async (activityId) => {
+  try {
+    const res = await fetch(`${API_BASE}/activities/${activityId}/routines`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// GET/routines
+export const fetchPublicRoutines = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/routines`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// POST/routines
+export const createNewRoutine = async (token, { name, goal, isPublic = null }) => {
+  try {
+    const res = await fetch(`${API_BASE}/routines`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ name, goal, isPublic })
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//PATCH /routines/:routineId
+export const modifyRoutine = async (token, routineId, { name, goal, isPublic }) => {
+  try {
+    const res = await fetch(`${API_BASE}/routines/${routineId}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ name, goal, isPublic })
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//DELETE /routines/:routineId
+export const removeRoutine = async (token, routineId) => {
+  try {
+    const res = await fetch(`${API_BASE}/routines/${routineId}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//POST /routines/:routineId/activities
+export const appendActivityToRoutine = async (routineId, { activityId, count, duration }) => {
+  try {
+    const res = await fetch(`${API_BASE}/routines/${routineId}/activities`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ activityId, count, duration })
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//PATCH /routine_activities/:routineActivityId
+export const editRoutineActivity = async (token, routineActivityId, { count, duration }) => {
+  try {
+    const res = await fetch(`${API_BASE}/routine_activities/${routineActivityId}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ count, duration })
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//DELETE /routine_activities/:routineActivityId
+export const detachActivityFromRoutine = async (token, routineActivityId) => {
+  try {
+    const res = await fetch(`${API_BASE}/routine_activities/${routineActivityId}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//CALL API helper function//
+const composeURL = (path) => `${API_BASE}${path}`;
+
+const createOptions = (method, body, token) => ({
+  method: method ? method.toUpperCase() : "GET",
+  headers: {
+    'Content-Type': 'application/json',
+    ...(token && { 'Authorization': `Bearer ${token}` }),
+  },
+  ...(body && { body: JSON.stringify(body) }),
+});
+
+export const invokeAPI = async({ path, method, body, token }) => {
+  try {
+    const response = await fetch(
+      composeURL(path),
+      createOptions(method, body, token),
+    );
+    console.log("Response: ", response);
+    const data = await response.json();
+    console.log(data);
+    if (data.error) throw data.error;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
